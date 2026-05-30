@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Tư Tưởng Hồ Chí Minh</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --bg-color: #ecf0f1;
+            --text-color: #333;
+            --card-bg: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-buttons button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background-color: #2980b9;
+        }
+
+        .breadcrumbs {
+            background-color: var(--card-bg);
+            padding: 10px 2rem;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .breadcrumbs span {
+            cursor: pointer;
+            color: var(--accent-color);
+        }
+        
+        .breadcrumbs span:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Grid for Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Accordion Style for Main Ideas */
+        .accordion-item {
+            background: var(--card-bg);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 15px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .accordion-header:hover {
+            background-color: #e9ecef;
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+        }
+
+        .accordion-content ul {
+            padding-left: 20px;
+        }
+
+        .accordion-content li {
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>Hệ Thống Ôn Tập</h2>
+        <div class="nav-buttons">
+            <button onclick="renderHome()">Ôn Theo Câu</button>
+            <button onclick="renderRandom('theory')">Lý Thuyết Ngẫu Nhiên</button>
+            <button onclick="renderRandom('value')">Giá Trị Ngẫu Nhiên</button>
+        </div>
+    </header>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        </div>
+
+    <div class="container" id="content">
+        </div>
+
+    <script>
+        // --- DỮ LIỆU TỪ FILE CSV ---
+        const data = [
+            {
+                id: 1,
+                title: "Câu 1. Quan điểm Hồ Chí Minh về vấn đề độc lập dân tộc.",
+                theory: [
+                    {
+                        main: "Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của các dân tộc",
+                        sub: [
+                            "Độc lập dân tộc là khát vọng lớn nhất của các dân tộc thuộc địa, mang tính phổ biến chống lại sự áp bức, bóc lột của CNĐQ cuối thế kỷ XIX. Hồ Chí Minh lên án chủ nghĩa thực dân đã chà đạp quyền dân tộc.",
+                            "Cách tiếp cận: Đi từ quyền con người lên quyền dân tộc. Khái quát hóa: Tất cả các dân tộc trên thế giới đều sinh ra bình đẳng... Đây là cơ sở pháp lý quốc tế mới về quyền dân tộc.",
+                            "Ý chí quyết tâm đấu tranh nhất quán: Từ 1919 (Yêu sách 8 điểm) -> 1930 (Chánh cương vắn tắt) -> 1945 (Cách mạng Tháng Tám) -> Kháng chiến chống Pháp và chống Mỹ (Không có gì quý hơn Độc lập tự do)."
+                        ]
+                    },
+                    {
+                        main: "Độc lập dân tộc phải gắn với tự do, ấm no, hạnh phúc của nhân dân",
+                        sub: [
+                            "Độc lập dân tộc phải gắn liền với hòa bình, nhân dân được hưởng tự do, ấm no, hạnh phúc.",
+                            "Tự do, ấm no, hạnh phúc là thước đo giá trị của độc lập dân tộc.",
+                            "Người từng nói: 'Nước được độc lập, dân không được hưởng ấm no, hạnh phúc thì độc lập chẳng có nghĩa gì'. 'Dân chỉ biết rõ giá trị của tự do khi được ăn no, mặc đủ'."
+                        ]
+                    },
+                    {
+                        main: "Độc lập dân tộc phải là một nền độc lập thật sự, hoàn toàn và triệt để",
+                        sub: [
+                            "Phê phán các nền độc lập hình thức: Độc lập dưới chế độ phong kiến hoặc độc lập giả hiệu do chủ nghĩa thực dân cũ/mới vẽ ra.",
+                            "Nền độc lập thực sự tức là dân tộc đó phải được độc lập về tất cả các mặt chính trị, kinh tế, toàn vẹn lãnh thổ.",
+                            "Độc lập phải gắn liền với quyền tự quyết dân tộc. Không có sự can thiệp của nước ngoài."
+                        ]
+                    },
+                    {
+                        main: "Độc lập dân tộc gắn liền với thống nhất, toàn vẹn lãnh thổ",
+                        sub: [
+                            "Nguyên tắc thống nhất, toàn vẹn lãnh thổ của tổ quốc là một nguyên tắc không thể nhân nhượng.",
+                            "'Nước Việt Nam là một, dân tộc Việt Nam là một', 'Sông có thể cạn, núi có thể mòn song chân lý đó không bao giờ thay đổi'.",
+                            "Khẳng định căn cứ pháp lý về quyền con người, quyền dân tộc, mang ý nghĩa thời đại và tính nhân văn cao cả."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Phát triển sáng tạo chủ nghĩa Mác - Lênin: Làm phong phú kho tàng lý luận, gắn độc lập dân tộc với CNXH, cách mạng thuộc địa có thể chủ động giành thắng lợi trước.",
+                            "Tính khoa học và cách mạng: Đặt độc lập dân tộc trong dòng chảy thời đại; đi từ quyền con người khái quát thành quyền dân tộc.",
+                            "Nền tảng tư tưởng cho Đảng: Là cơ sở lý luận trực tiếp để Đảng xây dựng đường lối, chiến lược."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Soi đường cho cách mạng Việt Nam: Ngọn cờ tập hợp sức mạnh toàn dân, dẫn đường cho CM Tháng Tám và 2 cuộc kháng chiến.",
+                            "Chứng minh bằng thành tựu lịch sử: Bảo vệ vững chắc chủ quyền, mang lại độc lập thực sự.",
+                            "Đóng góp cho thế giới: Cổ vũ phong trào giải phóng dân tộc của các nước thuộc địa."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Câu 2. Quan điểm Hồ Chí Minh về mục tiêu, động lực của chủ nghĩa xã hội.",
+                theory: [
+                    {
+                        main: "Mục tiêu chung",
+                        sub: [
+                            "Bảo đảm độc lập, tự do cho dân tộc, hạnh phúc cho nhân dân, không ngừng nâng cao đời sống vật chất, tinh thần.",
+                            "Nâng cao đời sống nhân dân là tiêu chí tối cao để kiểm nghiệm mọi lý luận và chính sách.",
+                            "Tính ưu việt: Giải phóng con người toàn diện từ tầm dân tộc, giai cấp đến cá nhân."
+                        ]
+                    },
+                    {
+                        main: "Mục tiêu cụ thể",
+                        sub: [
+                            "Chính trị: Nhà nước của dân, do dân, vì dân; phát huy dân chủ với nhân dân, chuyên chính với kẻ thù.",
+                            "Kinh tế: Nền kinh tế XHCN hiện đại có công - nông nghiệp tiên tiến, kết hợp hài hòa các lợi ích.",
+                            "Văn hóa - Xã hội: Nền văn hóa dân tộc, khoa học, đại chúng. Đào tạo con người mới vừa 'hồng' vừa 'chuyên'. Xã hội công bằng, dân chủ."
+                        ]
+                    },
+                    {
+                        main: "Động lực",
+                        sub: [
+                            "Con người là động lực quan trọng và quyết định nhất. Kết hợp hài hòa cá nhân với sức mạnh cộng đồng.",
+                            "Động lực tổ chức: Vai trò lãnh đạo của Đảng, cơ chế chính sách của Nhà nước.",
+                            "Kết hợp sức mạnh thời đại và kiên quyết đấu tranh chống lực cản (chủ nghĩa cá nhân, tham ô, quan liêu)."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Bổ sung, phát triển sáng tạo chủ nghĩa Mác – Lênin vào điều kiện cụ thể của Việt Nam.",
+                            "Tính khoa học và cách mạng: Đặt con người làm trung tâm (vừa là mục tiêu, vừa là động lực).",
+                            "Cơ sở lý luận để Đảng định hình mô hình, bước đi và huy động nguồn lực đi lên CNXH."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Ngọn đuốc soi đường: Khơi dậy lòng yêu nước, đại đoàn kết toàn dân tộc.",
+                            "Thực tiễn lịch sử chứng minh: Đưa cách mạng từ thắng lợi này đến thắng lợi khác (kháng chiến đến Đổi mới).",
+                            "Kim chỉ nam hiện nay: Chăm lo lợi ích nhân dân, chống lực cản để bảo vệ và phát triển đất nước."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Câu 3. Quan điểm Hồ Chí Minh về nhà nước pháp quyền.",
+                theory: [
+                    {
+                        main: "Nhà nước hợp pháp, hợp hiến",
+                        sub: [
+                            "Chú trọng xây dựng nền tảng pháp lý. Từ Yêu sách 1919 đến Bản Tuyên ngôn độc lập 1945.",
+                            "Tổ chức Tổng tuyển cử (6/1/1946) để tạo cơ sở hợp pháp. Thông qua Hiến pháp đầu tiên năm 1946."
+                        ]
+                    },
+                    {
+                        main: "Nhà nước thượng tôn pháp luật",
+                        sub: [
+                            "Làm tốt công tác lập pháp (soạn thảo Hiến pháp 1946, 1959, nhiều sắc lệnh).",
+                            "Đưa pháp luật vào cuộc sống, tạo cơ chế thi hành.",
+                            "Nêu cao tính nghiêm minh: Pháp luật đúng/đủ, cán bộ phải gương mẫu, nhân dân giám sát."
+                        ]
+                    },
+                    {
+                        main: "Pháp quyền nhân nghĩa",
+                        sub: [
+                            "Tôn trọng, bảo đảm và bảo vệ triệt để các quyền con người.",
+                            "Pháp luật phải có tính nhân văn, khuyến thiện, chống đối xử dã man, lấy giáo dục cảm hóa làm căn bản.",
+                            "Xây dựng và thi hành pháp luật dựa trên nền tảng đạo đức xã hội và vì con người."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Phát triển sáng tạo chủ nghĩa Mác - Lênin: Gắn tính giai cấp với tính nhân dân, dân tộc; kết hợp 'đức trị' và 'pháp trị'.",
+                            "Tính khoa học và cách mạng: Thiết lập hệ thống pháp lý qua bầu cử dân chủ, dùng pháp luật bảo vệ quyền con người.",
+                            "Nền tảng tư tưởng cho Đảng xây dựng Nhà nước pháp quyền XHCN của dân, do dân, vì dân."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Xây dựng nền móng hợp pháp: Khẳng định vị thế hợp pháp, hợp hiến quốc tế.",
+                            "Công cụ quản lý và kháng chiến: Hệ thống pháp luật giúp huy động sức mạnh chiến thắng xâm lược.",
+                            "Định hướng Đổi mới: Giữ vững ổn định chính trị, phát triển kinh tế, hội nhập quốc tế."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Câu 4. Quan điểm Hồ Chí Minh về lực lượng và nguyên tắc đoàn kết quốc tế.",
+                theory: [
+                    {
+                        main: "Các lực lượng cần đoàn kết",
+                        sub: [
+                            "Phong trào cộng sản và công nhân thế giới: Lực lượng nòng cốt.",
+                            "Phong trào đấu tranh giải phóng dân tộc: Là 'cái cánh' của cách mạng vô sản.",
+                            "Các lực lượng tiến bộ, yêu chuộng hòa bình, dân chủ trên thế giới."
+                        ]
+                    },
+                    {
+                        main: "Nguyên tắc đoàn kết quốc tế (Thống nhất mục tiêu; có lý, có tình)",
+                        sub: [
+                            "Với phong trào cộng sản: Trên nền tảng chủ nghĩa Mác-Lênin, có lý, có tình.",
+                            "Với các dân tộc: Quyền bình đẳng, độc lập, tự do.",
+                            "Với lực lượng tiến bộ: Hòa bình, chống chiến tranh, khơi dậy lương tri."
+                        ]
+                    },
+                    {
+                        main: "Nguyên tắc đoàn kết quốc tế (Độc lập, tự chủ)",
+                        sub: [
+                            "Nội lực giữ vai trò quyết định, ngoại lực phát huy thông qua nội lực (phải tự giúp mình trước).",
+                            "Đường lối chính trị độc lập, tỉnh táo để phân biệt bạn - thù.",
+                            "Thực lực là cái gốc: 'Thực lực là cái chiêng, ngoại giao là cái tiếng'."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Phát triển sáng tạo chủ nghĩa Mác – Lênin: Mở rộng khối đoàn kết ra toàn thể dân tộc bị áp bức và lực lượng tiến bộ.",
+                            "Tính khoa học và cách mạng: Tạo thế ứng xử kiên định lập trường, linh hoạt hành động.",
+                            "Nền tảng đường lối đối ngoại của Đảng ('đa phương hóa, đa dạng hóa')."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Tạo sức mạnh tổng hợp: Kết hợp sức mạnh dân tộc và thời đại đánh thắng Pháp, Mỹ.",
+                            "Giữ vững độc lập tự chủ trong mọi hoàn cảnh quốc tế phức tạp.",
+                            "Nâng cao thực lực và vị thế đất nước trên trường quốc tế hiện nay."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Câu 5. Quan điểm Hồ Chí Minh về vai trò của văn hóa.",
+                theory: [
+                    {
+                        main: "Văn hóa là mục tiêu, động lực của sự nghiệp cách mạng",
+                        sub: [
+                            "Mục tiêu: Quyền sống, quyền sung sướng, khát vọng hướng tới chân-thiện-mỹ, xây dựng xã hội dân chủ, công bằng.",
+                            "Động lực: Văn hóa chính trị soi đường; văn hóa văn nghệ bồi đắp ý chí; văn hóa giáo dục 'trồng người'; văn hóa đạo đức là cái gốc."
+                        ]
+                    },
+                    {
+                        main: "Văn hóa là một mặt trận",
+                        sub: [
+                            "Cuộc đấu tranh cách mạng trên lĩnh vực văn hóa - tư tưởng.",
+                            "Nghệ sĩ là chiến sĩ có nhiệm vụ phụng sự Tổ quốc, nhân dân.",
+                            "Vũ khí sắc bén 'phò chính trừ tà', cổ vũ cái tốt đẹp, phê phán thói hư tật xấu."
+                        ]
+                    },
+                    {
+                        main: "Văn hóa phục vụ quần chúng nhân dân",
+                        sub: [
+                            "Phản ánh đời sống lao động, chiến đấu của nhân dân.",
+                            "Quần chúng là người sáng tác, cung cấp tư liệu và là người thẩm định khách quan.",
+                            "Nhân dân phải là người hưởng thụ các giá trị văn hóa."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Phát triển sáng tạo: Nâng tầm văn hóa thành 'mặt trận' độc lập, ngang hàng chính trị, kinh tế.",
+                            "Tính khoa học và cách mạng: Xem nhân dân là chủ thể, biến văn nghệ thành vũ khí.",
+                            "Cơ sở đường lối để Đảng xây dựng nền văn hóa tiên tiến, đậm đà bản sắc dân tộc."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Cổ vũ thực tiễn cách mạng: Vũ khí xung kích ('tiếng hát át tiếng bom').",
+                            "Khơi dậy sức mạnh tinh thần, đẩy lùi thói xấu, hình thành lối sống mới.",
+                            "Vũ khí bảo vệ nền tảng tư tưởng, giữ gìn bản sắc trước 'xâm lăng văn hóa' hiện nay."
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "Câu 6. Quan điểm Hồ Chí Minh về những chuẩn mực đạo đức cách mạng.",
+                theory: [
+                    {
+                        main: "Trung với nước, hiếu với dân (phẩm chất quan trọng, bao trùm nhất)",
+                        sub: [
+                            "Kế thừa và đổi mới: Từ 'trung với vua' thành trung với sự nghiệp cách mạng quốc gia.",
+                            "Trung với nước: Đặt lợi ích Tổ quốc lên trên hết.",
+                            "Hiếu với dân: Gần dân, lấy dân làm gốc, chăm lo đời sống vật chất/tinh thần của nhân dân."
+                        ]
+                    },
+                    {
+                        main: "Cần, kiệm, liêm, chính, chí công vô tư",
+                        sub: [
+                            "Cần: Lao động siêng năng, sáng tạo, tự lực cánh sinh.",
+                            "Kiệm: Tiết kiệm sức lao động, thời giờ, tiền của.",
+                            "Liêm: Trong sạch, tôn trọng của công, không tham lam.",
+                            "Chính: Thẳng thắn, đứng đắn với mình, với người, với việc.",
+                            "Chí công vô tư: 'Lo trước thiên hạ, vui sau thiên hạ', chống chủ nghĩa cá nhân."
+                        ]
+                    },
+                    {
+                        main: "Thương yêu con người, sống có tình nghĩa",
+                        sub: [
+                            "Tình yêu dành cho người lao động bị áp bức.",
+                            "Nghiêm khắc với mình, độ lượng với người; nâng con người lên chứ không vùi dập.",
+                            "Khoan dung với những người mắc sai lầm đã hối cải."
+                        ]
+                    },
+                    {
+                        main: "Tinh thần quốc tế trong sáng",
+                        sub: [
+                            "Tinh thần quốc tế vô sản, đoàn kết với các dân tộc bị áp bức và người tiến bộ trên thế giới.",
+                            "Hướng tới mục tiêu hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội."
+                        ]
+                    }
+                ],
+                value: [
+                    {
+                        main: "Giá trị lý luận",
+                        sub: [
+                            "Bổ sung, phát triển: Cụ thể hóa nguyên lý đạo đức cộng sản, cách mạng hóa giá trị truyền thống.",
+                            "Tính khoa học: Đạo đức là 'gốc', là vũ khí sắc bén chứ không phải lý thuyết suông.",
+                            "Nền tảng để Đảng chỉnh đốn, phòng chống tham nhũng, rèn luyện cán bộ."
+                        ]
+                    },
+                    {
+                        main: "Giá trị thực tiễn",
+                        sub: [
+                            "Giáo dục nhiều thế hệ cán bộ 'quyết tử cho Tổ quốc quyết sinh'.",
+                            "Tạo sức mạnh nội sinh gắn kết Đảng - Dân, giành thắng lợi trong kháng chiến và đổi mới.",
+                            "Chứng minh: Giữ vững đạo đức thì thắng lợi, suy thoái đạo đức thì mất niềm tin và đe dọa chế độ."
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // --- TRẠNG THÁI ỨNG DỤNG ---
+        const contentDiv = document.getElementById('content');
+        const breadcrumbsDiv = document.getElementById('breadcrumbs');
+        let currentPath = []; 
+
+        // --- HÀM RENDER CHÍNH ---
+
+        // Khởi tạo trang chủ (Danh sách câu hỏi)
+        function renderHome() {
+            currentPath = [{ text: 'Trang chủ', action: 'renderHome()' }];
+            updateBreadcrumbs();
+            
+            let html = '<div class="grid">';
+            data.forEach(q => {
+                html += `
+                    <div class="card" onclick="renderQuestion(${q.id})">
+                        <h3>Câu ${q.id}</h3>
+                        <p>${q.title.replace(`Câu ${q.id}. `, '')}</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            contentDiv.innerHTML = html;
+        }
+
+        // Hiển thị phần chọn Lý thuyết hay Giá trị của 1 câu
+        function renderQuestion(id) {
+            const q = data.find(item => item.id === id);
+            currentPath = [
+                { text: 'Trang chủ', action: 'renderHome()' },
+                { text: `Câu ${id}`, action: `renderQuestion(${id})` }
+            ];
+            updateBreadcrumbs();
+
+            let html = `
+                <h2 style="margin-bottom: 20px; color: var(--primary-color)">${q.title}</h2>
+                <div class="grid">
+                    <div class="card" onclick="renderCategory(${id}, 'theory')" style="border-left-color: #e67e22;">
+                        <h3 style="color: #e67e22;">Lý Thuyết</h3>
+                        <p>Xem các ý chính và ý phụ về mặt lý thuyết của câu hỏi này.</p>
+                    </div>
+                    <div class="card" onclick="renderCategory(${id}, 'value')" style="border-left-color: #27ae60;">
+                        <h3 style="color: #27ae60;">Giá Trị</h3>
+                        <p>Xem giá trị lý luận và giá trị thực tiễn của quan điểm.</p>
+                    </div>
+                </div>
+            `;
+            contentDiv.innerHTML = html;
+        }
+
+        // Hiển thị danh sách Ý chính của Lý thuyết hoặc Giá trị
+        function renderCategory(id, type) {
+            const q = data.find(item => item.id === id);
+            const typeText = type === 'theory' ? 'Lý Thuyết' : 'Giá Trị';
+            
+            currentPath = [
+                { text: 'Trang chủ', action: 'renderHome()' },
+                { text: `Câu ${id}`, action: `renderQuestion(${id})` },
+                { text: typeText, action: `renderCategory(${id}, '${type}')` }
+            ];
+            updateBreadcrumbs();
+
+            let items = q[type];
+            let html = `<h2 style="margin-bottom: 20px; color: var(--primary-color)">${q.title} - Phân tích ${typeText}</h2>`;
+            
+            items.forEach((item, index) => {
+                html += `
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            ${item.main}
+                            <span style="font-size: 1.2rem;">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ul>
+                                ${item.sub.map(subItem => `<li>${subItem}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+            contentDiv.innerHTML = html;
+        }
+
+        // Chức năng Ôn tập ngẫu nhiên
+        function renderRandom(type) {
+            const typeText = type === 'theory' ? 'Lý Thuyết' : 'Giá Trị';
+            currentPath = [
+                { text: 'Trang chủ', action: 'renderHome()' },
+                { text: `Ôn tập ${typeText} Ngẫu Nhiên`, action: `renderRandom('${type}')` }
+            ];
+            updateBreadcrumbs();
+
+            // Thu thập tất cả các ý chính
+            let allItems = [];
+            data.forEach(q => {
+                q[type].forEach(item => {
+                    allItems.push({
+                        qId: q.id,
+                        qTitle: q.title,
+                        main: item.main,
+                        sub: item.sub
+                    });
+                });
+            });
+
+            // Trộn ngẫu nhiên (Fisher-Yates Shuffle)
+            for (let i = allItems.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+            }
+
+            let html = `<h2 style="margin-bottom: 20px; color: var(--primary-color)">Chế độ: Ôn tập ${typeText} ngẫu nhiên</h2>`;
+            
+            allItems.forEach(item => {
+                html += `
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <div>
+                                <span class="tag">Thuộc Câu ${item.qId}</span><br>
+                                ${item.main}
+                            </div>
+                            <span style="font-size: 1.2rem;">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <ul>
+                                ${item.sub.map(subItem => `<li>${subItem}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+            contentDiv.innerHTML = html;
+        }
+
+        // --- CÁC HÀM TIỆN ÍCH ---
+
+        // Cập nhật Breadcrumbs
+        function updateBreadcrumbs() {
+            breadcrumbsDiv.innerHTML = currentPath.map((p, index) => {
+                if (index === currentPath.length - 1) {
+                    return `<span>${p.text}</span>`;
+                }
+                return `<span onclick="${p.action}">${p.text}</span> > `;
+            }).join('');
+        }
+
+        // Hiệu ứng Toggle Accordion (Mở/Đóng ý phụ)
+        function toggleAccordion(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('span:last-child');
+            
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.innerText = "+";
+            } else {
+                content.style.display = "block";
+                icon.innerText = "-";
+            }
+        }
+
+        // Chạy lần đầu
+        renderHome();
+    </script>
+</body>
+</html>
